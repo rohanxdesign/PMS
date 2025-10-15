@@ -1,0 +1,192 @@
+// Prisma schema for Supabase-Postgres, v1 LLD
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL") // Supabase PG connection string
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+ 
+model Organization {
+  id          String   @id @default(cuid())
+  name        String
+  createdAt   DateTime @default(now())
+  members     Member[]
+  clients     Client[]
+  projects    Project[] @relation("OrganizationProjects")
+}
+
+model Member {
+  id             String   @id @default(cuid())
+  userId         String
+  orgId          String
+  role           Role
+  createdAt      DateTime @default(now())
+  Organization   Organization @relation(fields: [orgId], references: [id])
+  @@unique([userId, orgId])
+}
+
+enum Role {
+  FOUNDER
+  MARKETING
+  DESIGN
+  TECH
+}
+
+model Client {
+  id        String   @id @default(cuid())
+  orgId     String
+  name      String
+  tier      String?
+  status    String
+  createdAt DateTime @default(now())
+  Organization Organization @relation(fields: [orgId], references: [id])
+  projects  Project[]
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  orgId     String
+  clientId  String
+  name      String
+  type      String
+  status    String
+  startAt   DateTime?
+  endAt     DateTime?
+  createdAt DateTime @default(now())
+  organization Organization @relation(fields: [orgId], references: [id], name: "OrganizationProjects")
+  Client    Client   @relation(fields: [clientId], references: [id])
+  tasks     Task[]
+  campaigns Campaign[]
+}
+
+model Lead {
+  id        String   @id @default(cuid())
+  orgId     String
+  clientName String
+  contact   String?
+  source    String?
+  status    String   // New, Contacted, Qualified, Disqualified
+  ownerId   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Deal {
+  id        String   @id @default(cuid())
+  orgId     String
+  leadId    String?
+  clientId  String?
+  title     String
+  amount    Int?
+  stage     String   // New → Contacted → Negotiation → Contract Sent → Won → Lost
+  ownerId   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Task {
+  id          String   @id @default(cuid())
+  orgId       String
+  projectId   String
+  title       String
+  description String?
+  assigneeId  String?
+  dueAt       DateTime?
+  status      String
+  priority    Int      @default(3)
+  tags        String[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  project     Project  @relation(fields: [projectId], references: [id])
+}
+
+model Ticket {
+  id        String   @id @default(cuid())
+  orgId     String
+  projectId String?
+  title     String
+  description String?
+  status    String   // Backlog → In Progress → Testing → Review → Completed
+  assigneeId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Campaign {
+  id          String   @id @default(cuid())
+  orgId       String
+  projectId   String
+  name        String
+  channel     String
+  startAt     DateTime?
+  endAt       DateTime?
+  status      String
+  project     Project @relation(fields: [projectId], references: [id])
+  posts       Post[]
+}
+
+model Post {
+  id            String   @id @default(cuid())
+  orgId         String
+  campaignId    String
+  title         String
+  caption       String?
+  assetIds      String[]
+  scheduledAt   DateTime?
+  publishedAt   DateTime?
+  status        String
+  campaign      Campaign @relation(fields: [campaignId], references: [id])
+}
+
+model Asset {
+  id        String   @id @default(cuid())
+  orgId     String
+  url       String
+  kind      String
+  meta      Json?
+  createdAt DateTime @default(now())
+}
+
+model Dependency {
+  id          String   @id @default(cuid())
+  orgId       String
+  blockerTaskId String
+  blockedTaskId String
+  createdAt   DateTime @default(now())
+}
+
+model IntegrationAccount {
+  id        String   @id @default(cuid())
+  orgId     String
+  type      String
+  label     String?
+  secretRef String
+  createdAt DateTime @default(now())
+}
+
+model NotificationOutbox {
+  id        String   @id @default(cuid())
+  orgId     String
+  kind      String
+  to        String
+  template  String
+  payload   Json
+  status    String   @default("PENDING")
+  error     String?
+  createdAt DateTime @default(now())
+  sentAt    DateTime?
+}
+
+model ActivityLog {
+  id        String   @id @default(cuid())
+  orgId     String
+  actorId   String?
+  action    String
+  entity    String
+  entityId  String
+  payload   Json?
+  createdAt DateTime @default(now())
+}
