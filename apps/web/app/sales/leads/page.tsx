@@ -11,14 +11,14 @@ import { ViewDropdown } from "./components/ViewDropdown";
 import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchInrNprRate } from "@/app/lib/fx";
-import { useFirebaseLeads } from "@/app/context/FirebaseLeadsContext";
-import { useFirebaseCounts } from "@/app/lib/hooks/useFirebaseCounts";
+import { useMockLeads } from "@/app/context/MockLeadsContext";
+import { useMockCounts } from "@/app/lib/hooks/useMockCounts";
 import Link from "next/link";
 
 export default function SalesLeads() {
   const router = useRouter();
-  const { leads, deals } = useFirebaseLeads();
-  const { counts, isLoading: countsLoading, error: countsError } = useFirebaseCounts();
+  const { leads, deals } = useMockLeads();
+  const { counts, isLoading: countsLoading, error: countsError } = useMockCounts();
   
   // State management
   const [searchQuery, setSearchQuery] = useState("");

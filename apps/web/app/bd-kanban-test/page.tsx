@@ -1,10 +1,10 @@
 "use client";
 
 import { KanbanBoard } from "@/app/components/ui/KanbanBoard";
-import { useFirebaseLeads } from "@/app/context/FirebaseLeadsContext";
+import { useMockLeads } from "@/app/context/MockLeadsContext";
 
 export default function BDKanbanTest() {
-  const { leads } = useFirebaseLeads();
+  const { leads } = useMockLeads();
 
   const handleLeadClick = (lead: any) => {
     console.log('Lead clicked:', lead);

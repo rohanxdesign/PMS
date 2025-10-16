@@ -1,6 +1,28 @@
 import { Table, THead, TRow, TH, TD } from "@/app/components/ui/Table";
 import { formatCurrency } from "@/app/lib/fx";
-import { Lead } from "@/app/lib/api/leads";
+// Using Lead interface from MockLeadsContext
+interface Lead {
+  id: string;
+  name: string;
+  email?: string;
+  company?: string;
+  country: 'India' | 'Nepal';
+  stage: 'New' | 'Qualified' | 'Negotiation' | 'Proposal' | 'Contacted' | 'KT Pending' | 'Won' | 'Lost';
+  owner: string;
+  totalAmount: number;
+  totalDeals: number;
+  remarks?: string;
+  assigned_date: string;
+  created_at: string;
+  updated_at: string;
+  source?: string;
+  priority?: 'Low' | 'Medium' | 'High' | 'Urgent';
+  next_follow_up_date?: string;
+  last_contacted_date?: string;
+  temperature?: 'Hot' | 'Warm' | 'Cold';
+  lost_reason?: string;
+  owner_id?: string;
+}
 
 interface DealsTableProps {
   leads: Lead[];
@@ -12,8 +34,14 @@ export function DealsTable({ leads, fx, onLeadClick }: DealsTableProps) {
   const getStageLabel = (stage: string) => {
     switch (stage) {
       case "New": return "New";
+      case "Qualified": return "Qualified";
+      case "Negotiation": return "Negotiation";
+      case "KT Pending": return "KT Pending";
       case "Contacted": return "Meeting booked";
-      default: return "Qualified";
+      case "Proposal": return "Proposal";
+      case "Won": return "Won";
+      case "Lost": return "Lost";
+      default: return stage;
     }
   };
 

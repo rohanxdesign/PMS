@@ -7,12 +7,12 @@ import { Avatar } from "@/app/components/ui/Avatar";
 import { Dropdown } from "@/app/components/ui/Dropdown";
 import { DealsGrid } from "@/app/components/ui/DealsGrid";
 import { Edit3, Info, ChevronDown, Search, Save, X, ArrowLeft } from "lucide-react";
-import { useFirebaseLeads } from "@/app/context/FirebaseLeadsContext";
+import { useMockLeads } from "@/app/context/MockLeadsContext";
 
 export default function EditDeal() {
   const router = useRouter();
   const params = useParams();
-  const { addLead, addDeal, updateLead, updateDeal, getLeadById, getDealsByLeadId } = useFirebaseLeads();
+  const { addLead, addDeal, updateLead, updateDeal, getLeadById, getDealsByLeadId } = useMockLeads();
   
   const leadId = params.id as string;
   const isEditMode = leadId && leadId !== 'new';

@@ -4,7 +4,7 @@ import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCenter } 
 import { motion, AnimatePresence } from 'framer-motion';
 import { KanbanColumn } from "./KanbanColumn";
 import { KanbanCard } from "./KanbanCard";
-import { useFirebaseLeads } from '@/app/context/FirebaseLeadsContext';
+import { useMockLeads } from '@/app/context/MockLeadsContext';
 
 interface Lead {
   id: string;
@@ -24,18 +24,19 @@ interface KanbanBoardProps {
 }
 
 export function KanbanBoard({ leads, onLeadClick }: KanbanBoardProps) {
-  const { updateLead } = useFirebaseLeads();
+  const { updateLead } = useMockLeads();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [draggedLead, setDraggedLead] = useState<Lead | null>(null);
   
   // State for tracking expanded/collapsed columns
   const [expandedColumns, setExpandedColumns] = useState<Record<string, boolean>>({
+    newAssigned: true,
     qualified: true,
     negotiation: true,
+    ktPending: true,
     proposal: true,
     contacted: true,
-    newAssigned: false,
-    contractWon: false,
+    contractWon: true,
     contractLost: false
   });
   
@@ -138,6 +139,16 @@ export function KanbanBoard({ leads, onLeadClick }: KanbanBoardProps) {
       leads: groupedLeads["Negotiation"] || []
     },
     {
+      id: "ktPending",
+      title: "KT Pending",
+      stage: "KT Pending",
+      bgColor: "#fef3f2",
+      headerBg: "#fecdca",
+      headerText: "#912018",
+      borderColor: "rgba(254,205,202,0.64)",
+      leads: groupedLeads["KT Pending"] || []
+    },
+    {
       id: "proposal",
       title: "In Progress",
       stage: "Proposal",
@@ -149,7 +160,7 @@ export function KanbanBoard({ leads, onLeadClick }: KanbanBoardProps) {
     },
     {
       id: "contacted",
-      title: "KT Pending",
+      title: "Contacted",
       stage: "Contacted",
       bgColor: "#f5f9fc",
       headerBg: "#d0dff0",
