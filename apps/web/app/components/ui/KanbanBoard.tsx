@@ -4,7 +4,7 @@ import { DndContext, DragEndEvent, DragOverlay, DragStartEvent, closestCenter } 
 import { motion, AnimatePresence } from 'framer-motion';
 import { KanbanColumn } from "./KanbanColumn";
 import { KanbanCard } from "./KanbanCard";
-import { useLeads } from '@/app/context/LeadsContext';
+import { useFirebaseLeads } from '@/app/context/FirebaseLeadsContext';
 
 interface Lead {
   id: string;
@@ -24,7 +24,7 @@ interface KanbanBoardProps {
 }
 
 export function KanbanBoard({ leads, onLeadClick }: KanbanBoardProps) {
-  const { updateLead } = useLeads();
+  const { updateLead } = useFirebaseLeads();
   const [activeId, setActiveId] = useState<string | null>(null);
   const [draggedLead, setDraggedLead] = useState<Lead | null>(null);
   

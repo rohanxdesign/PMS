@@ -1,11 +1,11 @@
 "use client";
 import * as React from "react";
 import { Badge } from "@/app/components/ui/Badge";
-import { useLeads } from "@/app/context/LeadsContext";
+import { useFirebaseLeads } from "@/app/context/FirebaseLeadsContext";
 import { formatCurrency } from "@/app/lib/fx";
 
 export function LeadDrawer({ lead, onClose }: { lead: any; onClose: () => void }) {
-  const { deals } = useLeads();
+  const { deals } = useFirebaseLeads();
   
   if (!lead) return null;
 

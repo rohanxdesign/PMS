@@ -1,10 +1,10 @@
 "use client";
 import { KPI } from "@/app/components/ui/KPI";
-import { useLeads } from "@/app/context/LeadsContext";
+import { useFirebaseLeads } from "@/app/context/FirebaseLeadsContext";
 import { useMemo } from "react";
 
 export default function CommandCenter() {
-  const { deals } = useLeads();
+  const { deals } = useFirebaseLeads();
 
   // Calculate BD-specific metrics
   const metrics = useMemo(() => {

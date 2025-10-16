@@ -1,5 +1,5 @@
 import "./globals.css";
-import { LeadsProvider } from "./context/LeadsContext";
+import { FirebaseLeadsProvider } from "./context/FirebaseLeadsContext";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,9 +10,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet" />
       </head>
       <body style={{ margin: 0, fontFamily: 'var(--font-family)', background: 'white'}}>
-        <LeadsProvider>
+        <FirebaseLeadsProvider>
           {children}
-        </LeadsProvider>
+        </FirebaseLeadsProvider>
       </body>
     </html>
   );
