@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { fetchLeads, fetchDeals, updateLeadStage, Lead, Deal, subscribeToLeads, subscribeToDeals } from '@/app/lib/api/firebase/leads';
-import { fetchDeals as fetchDealsFromDeals, Deal as DealType } from '@/app/lib/api/firebase/deals';
+import { fetchLeads, updateLeadStage, Lead, subscribeToLeads } from '@/app/lib/api/firebase/leads';
+import { fetchDeals, Deal as DealType, subscribeToDeals } from '@/app/lib/api/firebase/deals';
 
 interface FirebaseLeadsContextType {
   leads: Lead[];

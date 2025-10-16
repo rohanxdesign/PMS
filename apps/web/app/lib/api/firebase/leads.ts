@@ -22,7 +22,7 @@ export interface Lead {
   email?: string;
   company?: string;
   country: 'India' | 'Nepal';
-  stage: 'New' | 'Qualified' | 'Negotiation' | 'Proposal' | 'Contacted' | 'Won' | 'Lost';
+  stage: 'New' | 'Qualified' | 'Negotiation' | 'Proposal' | 'Contacted' | 'KT Pending' | 'Won' | 'Lost';
   owner: string;
   totalAmount: number;
   totalDeals: number;
@@ -45,7 +45,7 @@ export interface CreateLeadData {
   email?: string;
   company?: string;
   country: 'India' | 'Nepal';
-  stage: 'New' | 'Qualified' | 'Negotiation' | 'Proposal' | 'Contacted' | 'Won' | 'Lost';
+  stage: 'New' | 'Qualified' | 'Negotiation' | 'Proposal' | 'Contacted' | 'KT Pending' | 'Won' | 'Lost';
   owner: string;
   remarks?: string;
   source?: string;
@@ -261,6 +261,23 @@ export async function getNewLeadsCountToday(): Promise<number> {
     return querySnapshot.size;
   } catch (error) {
     console.error('Error getting new leads count:', error);
+    throw error;
+  }
+}
+
+// Get count of KT (Knowledge Transfer) pending leads
+export async function getKTPendingCount(): Promise<number> {
+  try {
+    const leadsRef = collection(db, 'leads');
+    const q = query(
+      leadsRef,
+      where('stage', '==', 'KT Pending')
+    );
+    const querySnapshot = await getDocs(q);
+    
+    return querySnapshot.size;
+  } catch (error) {
+    console.error('Error getting KT pending count:', error);
     throw error;
   }
 }

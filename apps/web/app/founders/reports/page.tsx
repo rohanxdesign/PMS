@@ -1,3 +1,4 @@
+"use client";
 import dynamic from "next/dynamic";
 import { Card, CardContent, CardHeader } from "@/app/components/ui/Card";
 const ResponsiveContainer = dynamic(() => import("recharts").then(m => m.ResponsiveContainer), { ssr: false });
