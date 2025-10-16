@@ -1,4 +1,4 @@
-import { KanbanBoard } from "@/app/components/kanban/Kanban";
+import { KanbanBoard } from "@/app/components/ui/KanbanBoard";
 
 export default function TechKanban() {
   const columns = [

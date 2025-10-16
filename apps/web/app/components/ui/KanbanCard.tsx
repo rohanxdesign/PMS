@@ -9,7 +9,7 @@ interface KanbanCardProps {
   lead: {
     id: string;
     name: string;
-    company: string;
+    company?: string;
     country: "India" | "Nepal";
     stage: string;
     owner: string;
@@ -66,7 +66,7 @@ export function KanbanCard({ lead, onClick, borderColor = "rgba(0,0,0,0.1)" }: K
       {...listeners}
       {...attributes}
       onClick={onClick}
-      className={`bg-white rounded-lg p-3 cursor-pointer hover:shadow-md transition-all duration-200 group ${
+      className={`w-full min-w-[268px] bg-white rounded-lg p-3 cursor-pointer hover:shadow-md transition-all duration-200 group ${
         isDragging ? 'opacity-50 rotate-1 scale-105' : ''
       }`}
       whileHover={{ 
@@ -94,7 +94,7 @@ export function KanbanCard({ lead, onClick, borderColor = "rgba(0,0,0,0.1)" }: K
           <div className="flex items-center gap-1">
             <div className="w-4 h-4 bg-[#d0d5dd] rounded"></div>
             <span className="text-[10px] font-semibold text-[#101828]">
-              {lead.company}
+              {lead.company || 'N/A'}
             </span>
           </div>
         </div>

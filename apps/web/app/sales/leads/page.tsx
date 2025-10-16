@@ -11,12 +11,14 @@ import { ViewDropdown } from "./components/ViewDropdown";
 import { useMemo, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { fetchInrNprRate } from "@/app/lib/fx";
-import { useLeads } from "@/app/context/LeadsContext";
+import { useFirebaseLeads } from "@/app/context/FirebaseLeadsContext";
+import { useFirebaseCounts } from "@/app/lib/hooks/useFirebaseCounts";
 import Link from "next/link";
 
 export default function SalesLeads() {
   const router = useRouter();
-  const { leads, deals } = useLeads();
+  const { leads, deals } = useFirebaseLeads();
+  const { counts, isLoading: countsLoading, error: countsError } = useFirebaseCounts();
   
   // State management
   const [searchQuery, setSearchQuery] = useState("");
@@ -42,19 +44,6 @@ export default function SalesLeads() {
         .includes(searchQuery.toLowerCase())
     );
   }, [leads, searchQuery]);
-
-  // Deal status counts
-  const dealStatusCounts = useMemo(() => {
-    const newLeadsCount = leads.filter(lead => lead.stage === "New").length;
-    const ktPendingCount = deals.filter(deal => 
-      deal.stage === "Meeting booked" || deal.stage === "Proposal"
-    ).length;
-    
-    return {
-      newLeads: newLeadsCount,
-      ktPending: ktPendingCount
-    };
-  }, [leads, deals]);
   
   // Initialize data
   useEffect(() => { 
@@ -83,14 +72,20 @@ export default function SalesLeads() {
   };
 
   return (
-    <main className="min-h-screen p-6 space-y-4">
+    <main className="min-h-screen p-5 space-y-4">
       {/* Header Section */}
       <div className="flex justify-center w-full">
         <div className="w-full max-w-[1224px] mx-auto">
           <div>
             <div className="text-sm font-semibold text-gray-800">{today}</div>
             <div className="text-sm text-gray-500">
-              You have {dealStatusCounts.newLeads} new leads assigned and {dealStatusCounts.ktPending} KTs pending today
+              {countsLoading ? (
+                "Loading counts..."
+              ) : countsError ? (
+                "Error loading counts"
+              ) : (
+                `You have ${counts.newLeads} new leads assigned and ${counts.ktPending} KTs pending today`
+              )}
             </div>
           </div>
         </div>
@@ -142,13 +137,17 @@ export default function SalesLeads() {
 
       {/* Content */}
       {viewMode === 'table' ? (
-        <DealsTable 
-          leads={filteredLeads} 
-          fx={fx} 
-          onLeadClick={handleLeadClick} 
-        />
+        <div className="flex justify-center w-full">
+          <div className="w-full max-w-[1224px] mx-auto">
+            <DealsTable 
+              leads={filteredLeads} 
+              fx={fx} 
+              onLeadClick={handleLeadClick} 
+            />
+          </div>
+        </div>
       ) : (
-        <div className="bg-gray-50 rounded-lg p-4">
+        <div className="w-full">
           <KanbanBoard 
             leads={filteredLeads} 
             onLeadClick={handleLeadClick}

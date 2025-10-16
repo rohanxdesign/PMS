@@ -1,11 +1,11 @@
 import { Table, THead, TRow, TH, TD } from "@/app/components/ui/Table";
 import { formatCurrency } from "@/app/lib/fx";
-import { SampleLead } from "@/app/data/sample";
+import { Lead } from "@/app/lib/api/leads";
 
 interface DealsTableProps {
-  leads: SampleLead[];
+  leads: Lead[];
   fx: { nprPerInr: number; inrPerNpr: number } | null;
-  onLeadClick: (lead: SampleLead) => void;
+  onLeadClick: (lead: Lead) => void;
 }
 
 export function DealsTable({ leads, fx, onLeadClick }: DealsTableProps) {
@@ -17,7 +17,7 @@ export function DealsTable({ leads, fx, onLeadClick }: DealsTableProps) {
     }
   };
 
-  const getCurrencyDisplay = (lead: SampleLead) => {
+  const getCurrencyDisplay = (lead: Lead) => {
     if (lead.country === "Nepal") {
       return {
         primary: formatCurrency(lead.totalAmount, "NPR"),
@@ -101,7 +101,7 @@ export function DealsTable({ leads, fx, onLeadClick }: DealsTableProps) {
                     
                     <TD className="w-52">
                       <p className="font-medium text-sm text-gray-900">
-                        {lead.company}
+                        {lead.company || 'N/A'}
                       </p>
                     </TD>
                     
